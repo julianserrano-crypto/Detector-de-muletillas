@@ -10,9 +10,10 @@
   --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
   --ink: #f8fafc;
   --mute: #94a3b8;
-  --card: rgba(30, 41, 59, 0.6);
+  --card: rgba(30, 41, 59, 0.65);
   --red: #f43f5e;
   --red-glow: #e11d48;
+  --green: #10b981;
   --line: rgba(255, 255, 255, 0.15);
   --accent: #6366f1;
 }
@@ -32,8 +33,16 @@ body {
   margin: auto;
 }
 
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
 h1 {
-  font: 800 clamp(2rem, 6vw, 3.6rem)/1.1 "Poppins", sans-serif;
+  font: 800 clamp(2rem, 6vw, 3.4rem)/1.1 "Poppins", sans-serif;
   letter-spacing: -0.02em;
   text-shadow: 0 4px 12px rgba(0,0,0,0.3);
 }
@@ -47,7 +56,45 @@ h1 em {
 header p {
   color: var(--mute);
   margin-top: 6px;
-  font-size: 1.1rem;
+  font-size: 1.05rem;
+}
+
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid var(--line);
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--mute);
+  transition: all 0.3s ease;
+}
+
+.status-pill.live {
+  background: rgba(16, 185, 129, 0.15);
+  border-color: rgba(16, 185, 129, 0.4);
+  color: #34d399;
+}
+
+.status-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--mute);
+}
+
+.status-pill.live .status-dot {
+  background: var(--green);
+  box-shadow: 0 0 10px var(--green);
+  animation: pulse 1.2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.4); opacity: 0.6; }
 }
 
 .topic {
@@ -64,15 +111,15 @@ header p {
 }
 
 .topic small {
-  color: rgba(255,255,255,0.7);
+  color: rgba(255,255,255,0.75);
   display: block;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   margin-bottom: 4px;
 }
 
-#topic { font: 600 clamp(1.2rem, 3vw, 1.8rem)/1.2 "Poppins", sans-serif; }
+#topic { font: 600 clamp(1.2rem, 3vw, 1.75rem)/1.25 "Poppins", sans-serif; }
 
 button {
   font: 600 1.05rem "Poppins", sans-serif;
@@ -107,7 +154,7 @@ button.ghost:hover:not(:disabled) {
 }
 
 button:disabled {
-  opacity: 0.5;
+  opacity: 0.45;
   cursor: not-allowed;
   filter: grayscale(1);
 }
@@ -150,7 +197,7 @@ button:focus-visible, input:focus-visible, summary:focus-visible {
 
 .bar {
   height: 18px;
-  background: rgba(0,0,0,0.3);
+  background: rgba(0,0,0,0.35);
   border-radius: 20px;
   overflow: hidden;
   box-shadow: inset 0 2px 4px rgba(0,0,0,0.3);
@@ -162,7 +209,11 @@ button:focus-visible, input:focus-visible, summary:focus-visible {
   width: 100%;
   background: linear-gradient(90deg, #34d399, #10b981);
   border-radius: 20px;
-  transition: width 0.2s linear;
+  transition: width 0.2s linear, background 0.3s ease;
+}
+
+.bar i.low {
+  background: linear-gradient(90deg, #fbbf24, #f43f5e);
 }
 
 .tx {
@@ -170,23 +221,24 @@ button:focus-visible, input:focus-visible, summary:focus-visible {
   border: 1px solid var(--line);
   border-radius: 16px;
   padding: 24px;
-  min-height: 35vh;
-  max-height: 40vh;
+  min-height: 34vh;
+  max-height: 42vh;
   overflow-y: auto;
-  font: 400 clamp(1.4rem, 3vw, 2rem)/1.6 "Poppins", sans-serif;
+  font: 400 clamp(1.35rem, 3vw, 1.9rem)/1.65 "Poppins", sans-serif;
   backdrop-filter: blur(12px);
   box-shadow: inset 0 4px 15px rgba(0,0,0,0.2);
 }
 
-.tx .ph { color: #475569; font-style: italic; }
+.tx .ph { color: #64748b; font-style: italic; }
+.tx .interim { color: #94a3b8; font-style: italic; }
 
 mark {
   background: var(--red);
   color: #fff;
   font-weight: 800;
-  padding: 0.1em 0.4em;
+  padding: 0.08em 0.38em;
   border-radius: 8px;
-  margin: 0 0.1em;
+  margin: 0 0.08em;
   box-shadow: 0 4px 10px rgba(225, 29, 72, 0.4);
   text-transform: uppercase;
 }
@@ -200,7 +252,7 @@ mark {
 .controls button { font-size: 1.1rem; padding: 16px 32px; flex: 1; min-width: 200px; }
 
 details {
-  background: rgba(0,0,0,0.2);
+  background: rgba(0,0,0,0.25);
   padding: 16px;
   border-radius: 12px;
   border: 1px solid var(--line);
@@ -213,7 +265,7 @@ details input[type="text"], details input:not([type="checkbox"]) {
   width: 100%;
   margin: 12px 0 6px;
   padding: 12px 16px;
-  background: rgba(0,0,0,0.3);
+  background: rgba(0,0,0,0.35);
   border: 1px solid var(--line);
   border-radius: 8px;
   font: inherit;
@@ -226,6 +278,7 @@ details input[type="text"], details input:not([type="checkbox"]) {
   padding: 12px 16px;
   border-radius: 12px;
   border: 1px solid rgba(245, 158, 11, 0.3);
+  font-size: 0.95rem;
 }
 
 #warn:empty { display: none; }
@@ -235,7 +288,7 @@ details input[type="text"], details input:not([type="checkbox"]) {
   inset: 0;
   display: grid;
   place-items: center;
-  font: 800 clamp(3.5rem, 15vw, 11rem) "Poppins", sans-serif;
+  font: 800 clamp(3rem, 14vw, 9.5rem) "Poppins", sans-serif;
   color: var(--red);
   -webkit-text-stroke: 2px #fff;
   text-shadow: 0 0 40px rgba(244, 63, 94, 0.8);
@@ -244,12 +297,12 @@ details input[type="text"], details input:not([type="checkbox"]) {
   z-index: 100;
 }
 
-#flash.on { animation: fl 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+#flash.on { animation: fl 0.75s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
 
 @keyframes fl {
-  0% { opacity: 1; transform: scale(0.5) rotate(-10deg); }
-  30% { opacity: 1; transform: scale(1.1) rotate(3deg); }
-  100% { opacity: 0; transform: scale(1.3) rotate(0deg); }
+  0% { opacity: 1; transform: scale(0.5) rotate(-8deg); }
+  30% { opacity: 1; transform: scale(1.08) rotate(2deg); }
+  100% { opacity: 0; transform: scale(1.25) rotate(0deg); }
 }
 
 #res {
@@ -269,7 +322,7 @@ details input[type="text"], details input:not([type="checkbox"]) {
   background: linear-gradient(145deg, #1e293b, #0f172a);
   border: 1px solid rgba(255,255,255,0.1);
   border-radius: 24px;
-  padding: clamp(30px, 5vw, 50px);
+  padding: clamp(28px, 5vw, 48px);
   max-width: 600px;
   width: 100%;
   text-align: center;
@@ -293,11 +346,11 @@ details input[type="text"], details input:not([type="checkbox"]) {
 }
 
 .card li {
-  background: rgba(255,255,255,0.05);
+  background: rgba(255,255,255,0.06);
   border: 1px solid var(--line);
   border-radius: 20px;
   padding: 8px 18px;
-  font-size: 1.1rem;
+  font-size: 1.05rem;
 }
 
 .card p { margin: 10px 0; font-size: 1.1rem; }
@@ -306,7 +359,7 @@ details input[type="text"], details input:not([type="checkbox"]) {
   color: var(--mute);
   font-style: italic;
   margin: 20px 0 24px!important;
-  font-size: 1rem !important;
+  font-size: 0.98rem !important;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -322,8 +375,14 @@ details input[type="text"], details input:not([type="checkbox"]) {
 </head>
 <body>
 <header>
-  <h1>Detector de <em>muletillas</em></h1>
-  <p>Habla 30 segundos sin decir “ehhh”, “este” o “pues”. Cada una aparecerá en rojo.</p>
+  <div>
+    <h1>Detector de <em>muletillas</em></h1>
+    <p>Habla 30 segundos sin decir “ehhh”, “este” o “pues”. Cada una aparecerá en rojo.</p>
+  </div>
+  <div id="status" class="status-pill">
+    <span class="status-dot"></span>
+    <span id="statusText">Micrófono listo</span>
+  </div>
 </header>
 
 <div id="warn"></div>
@@ -348,12 +407,8 @@ details input[type="text"], details input:not([type="checkbox"]) {
 
 <details>
   <summary>⚙️ Muletillas que se detectan</summary>
-  <input id="list" value="este, pues, o sea, bueno, es que, entonces, digamos, tipo, como que, a ver, ok, okay, okey, vale, mira, oye, sabes, verdad, me entiendes, ya sabes, la verdad, mejor dicho, no pues, en fin, en plan, básicamente, literalmente, obviamente, y todo eso, o algo así" aria-label="Lista de muletillas separadas por comas">
-  <small>Separadas por comas. Los sonidos “eh”, “ehhh”, “mmm”, “ahh” se detectan solos.</small>
-  <label style="display:flex; align-items:center; margin-top:14px; cursor:pointer;">
-    <input type="checkbox" id="aud" checked style="width:20px;height:20px;margin-right:10px;accent-color:var(--accent);">
-    Detectar “eeeh” alargados por el audio (solo escritorio)
-  </label>
+  <input id="list" value="este, pues, o sea, bueno, es que, entonces, digamos, tipo, como que, a ver, ok, okay, okey, vale, mira, oye, sabes, verdad, me entiendes, ya sabes, la verdad, mejor dicho, no pues, en fin, en plan, básicamente, literalmente, obviamente, y todo eso, o algo así, eh, ehh, ehhh, mmm, ahh" aria-label="Lista de muletillas separadas por comas">
+  <small>Separadas por comas. Puedes agregar o quitar palabras libremente.</small>
 </details>
 
 <div id="flash" aria-hidden="true">¡MULETILLA!</div>
@@ -370,167 +425,286 @@ details input[type="text"], details input:not([type="checkbox"]) {
 </div>
 
 <script>
-const SECS=30;
-const TOPICS=["Por qué los perros son mejores que los gatos","El mejor día de tu vida","Por qué el lunes debería eliminarse","Tu comida favorita","El superpoder que elegirías","Por qué las vacaciones deberían ser más largas","Tu película favorita","El mejor lugar para viajar"];
-const DEMO="Bueno pues los perros son mejores porque este son muy leales eh y siempre están contentos o sea te reciben en la puerta ok y además ehhh no se enojan como los gatos pues este tipo son más sociables verdad entonces por eso digo que los perros ganan";
-const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
-const IS_MOBILE=/Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-const $=id=>document.getElementById(id);
-const norm=s=>s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z ]/g,'');
-const esc=s=>s.replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
-const EH=/^(e+h+m*|e{2,}m*|e+m+|h?m{2,}|a+h+|u+m+)$/;
+const SECS = 30;
+const TOPICS = [
+  "Por qué los perros son mejores que los gatos",
+  "El mejor día de tu vida",
+  "Por qué el lunes debería eliminarse",
+  "Tu comida favorita",
+  "El superpoder que elegirías",
+  "Por qué las vacaciones deberían ser más largas",
+  "Tu película favorita",
+  "El mejor lugar para viajar"
+];
+const DEMO = "Bueno pues los perros son mejores porque este son muy leales eh y siempre están contentos o sea te reciben en la puerta ok y además ehhh no se enojan como los gatos pues este tipo son más sociables verdad entonces por eso digo que los perros ganan";
 
-const EH_MS=900;
-let fillers=[],fin='',itr='',peak=0,running=false,end=0,timer,demoT,rec,last={words:[],groups:[]};
-let events=[],baseLen=0,lastTx=0,aTimer,mic,ac;
+const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+const IS_MOBILE = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+const $ = id => document.getElementById(id);
 
-if(IS_MOBILE)$('aud').checked=false;
+const norm = s => s.toLowerCase()
+  .normalize('NFD')
+  .replace(/[\u0300-\u036f]/g, '')
+  .replace(/[^a-z0-9\s]/g, '')
+  .trim();
 
-function loadFillers(){
-  fillers=$('list').value.split(',').map(s=>norm(s).trim().split(/\s+/).filter(Boolean)).filter(a=>a.length).sort((a,b)=>b.length-a.length);
+const esc = s => s.replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+const EH_REGEX = /^(e+h+m*|e{2,}m*|e+m+|h?m{2,}|a+h+|u+m+)$/;
+
+let fillers = [];
+let finalChunks = [];
+let interimText = '';
+let peak = 0;
+let running = false;
+let end = 0;
+let timer, demoT, rec;
+let lastResult = { words: [], groups: [] };
+
+function loadFillers() {
+  fillers = $('list').value
+    .split(',')
+    .map(s => norm(s).split(/\s+/).filter(Boolean))
+    .filter(a => a.length > 0)
+    .sort((a, b) => b.length - a.length);
 }
 
-function analyze(words){
-  const t=words.map(norm),m=t.map(()=>false),groups=[];
-  for(let i=0;i<t.length;i++){
-    let len=(EH.test(t[i])||(t[i]==='e'&&!/^h?i/.test(t[i+1]||'')))?1:0;
-    if(!len)for(const f of fillers)if(f.every((x,k)=>t[i+k]===x)){len=f.length;break}
-    if(len){for(let k=0;k<len;k++)m[i+k]=true;groups.push(t.slice(i,i+len).join(' '));i+=len-1}
-  }
-  return{m,groups};
-}
+function analyze(words) {
+  const clean = words.map(norm);
+  const marks = clean.map(() => false);
+  const groups = [];
 
-function render(){
-  const words=(fin+' '+itr).split(/\s+/).filter(Boolean);baseLen=words.length;
-  [...events].sort((a,b)=>b-a).forEach(p=>words.splice(Math.min(p,words.length),0,'eeeh'));
-  const{m,groups}=analyze(words);
-  last={words,groups};
-  $('tx').innerHTML=words.length?words.map((w,i)=>m[i]?`<mark>${esc(w)}</mark>`:esc(w)).join(' '):'<span class="ph">Aquí aparecerá lo que digas…</span>';
-  $('count').textContent=groups.length;
-  if(groups.length>peak){peak=groups.length;flash()}
-  $('tx').scrollTop=1e6;
-}
+  for (let i = 0; i < clean.length; i++) {
+    if (!clean[i]) continue;
+    let len = EH_REGEX.test(clean[i]) ? 1 : 0;
 
-function flash(){const f=$('flash');f.classList.remove('on');void f.offsetWidth;f.classList.add('on')}
-function warn(t){$('warn').textContent=t}
-function newTopic(){$('topic').textContent=TOPICS[Math.floor(Math.random()*TOPICS.length)]}
-
-function reset(){
-  fin=itr='';peak=0;events=[];$('time').textContent=SECS;$('bar').style.width='100%';render();
-}
-
-function start(demo){
-  loadFillers();reset();warn('');$('res').hidden=true;
-  running=true;end=Date.now()+SECS*1000;
-  $('go').textContent='⏹ Detener';$('demo').disabled=true;
-  timer=setInterval(tick,200);
-  if(demo){
-    const w=DEMO.split(' ');let i=0;
-    demoT=setInterval(()=>{if(i<w.length){fin+=' '+w[i++];render()}},SECS*900/w.length);
-  }else{
-    startRec();
-    if($('aud').checked&&!IS_MOBILE)startAudio();
-  }
-}
-
-function tick(){
-  const left=Math.max(0,(end-Date.now())/1000);
-  $('time').textContent=Math.ceil(left);
-  $('bar').style.width=left/SECS*100+'%';
-  if(left<=0)stop();
-}
-
-function startRec(){
-  rec=new SR();
-  rec.lang='es-CO';
-  rec.continuous=!IS_MOBILE;
-  rec.interimResults=true;
-  let sesFin='';
-  rec.onresult=e=>{
-    let f='',t='';
-    for(let i=0;i<e.results.length;i++){
-      const r=e.results[i];
-      if(r.isFinal)f+=' '+r[0].transcript;
-      else t+=r[0].transcript;
+    if (!len) {
+      for (const f of fillers) {
+        if (i + f.length <= clean.length && f.every((x, k) => clean[i + k] === x)) {
+          len = f.length;
+          break;
+        }
+      }
     }
-    sesFin=f;
-    itr=f+' '+t;
-    lastTx=Date.now();
+
+    if (len > 0) {
+      for (let k = 0; k < len; k++) marks[i + k] = true;
+      groups.push(clean.slice(i, i + len).join(' '));
+      i += len - 1;
+    }
+  }
+  return { marks, groups };
+}
+
+function render() {
+  const confirmedText = finalChunks.join(' ').trim();
+  const confirmedWords = confirmedText ? confirmedText.split(/\s+/) : [];
+  const { marks, groups } = analyze(confirmedWords);
+
+  lastResult = { words: confirmedWords, groups };
+
+  let html = '';
+  if (confirmedWords.length) {
+    html += confirmedWords.map((w, i) => marks[i] ? `<mark>${esc(w)}</mark>` : esc(w)).join(' ');
+  }
+  if (interimText.trim()) {
+    html += (html ? ' ' : '') + `<span class="interim">${esc(interimText.trim())}</span>`;
+  }
+
+  $('tx').innerHTML = html || '<span class="ph">Aquí aparecerá lo que digas…</span>';
+  $('count').textContent = groups.length;
+
+  if (groups.length > peak) {
+    peak = groups.length;
+    flash();
+  }
+  $('tx').scrollTop = $('tx').scrollHeight;
+}
+
+function setStatus(active, label) {
+  const pill = $('status');
+  pill.classList.toggle('live', active);
+  $('statusText').textContent = label;
+}
+
+function flash() {
+  const f = $('flash');
+  f.classList.remove('on');
+  void f.offsetWidth;
+  f.classList.add('on');
+}
+
+function warn(t) { $('warn').textContent = t; }
+function newTopic() { $('topic').textContent = TOPICS[Math.floor(Math.random() * TOPICS.length)]; }
+
+function reset() {
+  finalChunks = [];
+  interimText = '';
+  peak = 0;
+  $('time').textContent = SECS;
+  $('bar').style.width = '100%';
+  $('bar').classList.remove('low');
+  render();
+}
+
+function start(demo) {
+  loadFillers();
+  reset();
+  warn('');
+  $('res').hidden = true;
+  running = true;
+  end = Date.now() + SECS * 1000;
+  $('go').textContent = '⏹ Detener';
+  $('demo').disabled = true;
+
+  timer = setInterval(tick, 200);
+
+  if (demo) {
+    setStatus(true, 'Modo demostración');
+    const w = DEMO.split(' ');
+    let i = 0;
+    demoT = setInterval(() => {
+      if (i < w.length) {
+        finalChunks.push(w[i++]);
+        render();
+      }
+    }, (SECS * 850) / w.length);
+  } else {
+    startRec();
+  }
+}
+
+function tick() {
+  const left = Math.max(0, (end - Date.now()) / 1000);
+  $('time').textContent = Math.ceil(left);
+  const pct = (left / SECS) * 100;
+  $('bar').style.width = pct + '%';
+  if (pct < 25) $('bar').classList.add('low');
+  if (left <= 0) stop();
+}
+
+function startRec() {
+  rec = new SR();
+  rec.lang = 'es-CO';
+  rec.continuous = !IS_MOBILE;
+  rec.interimResults = true;
+
+  let sessionFinal = '';
+
+  rec.onstart = () => {
+    setStatus(true, 'Escuchando tu voz…');
+  };
+
+  rec.onresult = e => {
+    let f = '';
+    let t = '';
+    for (let i = 0; i < e.results.length; i++) {
+      const r = e.results[i];
+      if (r.isFinal) f += ' ' + r[0].transcript;
+      else t += ' ' + r[0].transcript;
+    }
+
+    if (!IS_MOBILE) {
+      finalChunks = [f.trim()];
+      interimText = t;
+    } else {
+      sessionFinal = f.trim();
+      interimText = (sessionFinal + ' ' + t).trim();
+    }
     render();
   };
-  rec.onend=()=>{
-    if(sesFin){fin+=' '+sesFin;sesFin='';itr='';render();}
-    if(running)setTimeout(()=>{if(running)try{rec.start()}catch(e){}},120);
+
+  rec.onend = () => {
+    if (IS_MOBILE && sessionFinal) {
+      finalChunks.push(sessionFinal);
+      sessionFinal = '';
+      interimText = '';
+      render();
+    }
+    if (running) {
+      setTimeout(() => {
+        if (running) {
+          try { rec.start(); } catch (e) {}
+        }
+      }, 100);
+    } else {
+      setStatus(false, 'Micrófono listo');
+    }
   };
-  rec.onerror=e=>{
-    if(e.error==='no-speech'||e.error==='aborted')return;
-    if(e.error==='not-allowed'||e.error==='service-not-allowed'){
-      warn('No hay permiso para usar el micrófono. Permítelo en la barra de direcciones y vuelve a empezar.');
+
+  rec.onerror = e => {
+    if (e.error === 'no-speech' || e.error === 'aborted') return;
+    if (e.error === 'not-allowed' || e.error === 'service-not-allowed') {
+      warn('Permiso de micrófono denegado. Actívalo en los ajustes del navegador y vuelve a intentar.');
       stop(true);
-    }else if(e.error==='network'){
-      warn('El reconocimiento de voz necesita conexión a internet.');
+    } else if (e.error === 'network') {
+      warn('El reconocimiento de voz requiere conexión a internet estable.');
       stop(true);
     }
   };
-  try{rec.start()}catch(e){warn('No se pudo iniciar el micrófono.');stop(true)}
+
+  try {
+    rec.start();
+  } catch (e) {
+    warn('No se pudo iniciar el micrófono. Asegúrate de abrir la página mediante HTTPS.');
+    stop(true);
+  }
 }
 
-async function startAudio(){
-  try{
-    mic=await navigator.mediaDevices.getUserMedia({audio:true});
-    ac=new AudioContext();const an=ac.createAnalyser();an.fftSize=1024;
-    ac.createMediaStreamSource(mic).connect(an);
-    const buf=new Uint8Array(an.fftSize);
-    let t0=0,lastV=0,cool=0,floor=1;lastTx=Date.now();
-    aTimer=setInterval(()=>{
-      an.getByteTimeDomainData(buf);
-      let s=0;for(const v of buf){const d=(v-128)/128;s+=d*d}
-      const rms=Math.sqrt(s/buf.length),now=Date.now();
-      floor=Math.min(floor,Math.max(rms,.004));
-      if(rms>Math.max(.03,floor*4)){if(now-lastV>300)t0=now;lastV=now}
-      if(running&&now-lastV<300&&now-t0>EH_MS-200&&now-lastTx>EH_MS&&now>cool){
-        events.push(baseLen);cool=now+1500;render();
-      }
-    },100);
-  }catch(e){}
-}
-function stopAudio(){
-  clearInterval(aTimer);
-  try{mic&&mic.getTracks().forEach(t=>t.stop());ac&&ac.close()}catch(e){}
-  mic=ac=null;
+function stop(quiet) {
+  if (!running) return;
+  running = false;
+  clearInterval(timer);
+  clearInterval(demoT);
+
+  if (interimText.trim()) {
+    finalChunks.push(interimText.trim());
+    interimText = '';
+    render();
+  }
+
+  try { rec && rec.stop(); } catch (e) {}
+  setStatus(false, 'Micrófono listo');
+  $('go').textContent = '🎙️ Empezar';
+  $('demo').disabled = false;
+
+  if (!quiet) setTimeout(showResults, 500);
 }
 
-function stop(quiet){
-  if(!running)return;
-  running=false;clearInterval(timer);clearInterval(demoT);stopAudio();
-  if(itr){fin+=' '+itr;itr='';render();}
-  try{rec&&rec.stop()}catch(e){}
-  $('go').textContent='🎙️ Empezar';$('demo').disabled=false;
-  if(!quiet)setTimeout(showResults,700);
+function showResults() {
+  const { words, groups } = lastResult;
+  const n = groups.length;
+  const tally = {};
+  groups.forEach(g => tally[g] = (tally[g] || 0) + 1);
+  const top = Object.entries(tally).sort((a, b) => b[1] - a[1]).slice(0, 5);
+  const pct = words.length ? Math.round((n / words.length) * 100) : 0;
+
+  $('rn').textContent = n;
+  $('rs').textContent = `en ${words.length} palabras (${pct}% de tu discurso)`;
+  $('rt').innerHTML = top.map(([w, c]) => `<li><b>${esc(w)}</b> ×${c}</li>`).join('');
+  $('rm').textContent =
+    n === 0 ? 'Discurso limpio. ¡Excelente control!' :
+    n <= 3 ? 'Bastante fluido. Casi no se notan.' :
+    n <= 8 ? 'Se escuchan. Pausar en silencio es mejor que rellenar.' :
+    'Las muletillas se robaron el show.';
+
+  $('res').hidden = false;
 }
 
-function showResults(){
-  const{words,groups}=last,n=groups.length,tally={};
-  groups.forEach(g=>tally[g]=(tally[g]||0)+1);
-  const top=Object.entries(tally).sort((a,b)=>b[1]-a[1]).slice(0,5);
-  const pct=words.length?Math.round(n/words.length*100):0;
-  $('rn').textContent=n;
-  $('rs').textContent=`en ${words.length} palabras (${pct}% de tu discurso)`;
-  $('rt').innerHTML=top.map(([w,c])=>`<li><b>${esc(w)}</b> ×${c}</li>`).join('');
-  $('rm').textContent=n===0?'Discurso limpio. ¿O será que el micrófono no las escuchó? 😅'
-    :n<=3?'Bastante fluido. Casi no se notan.'
-    :n<=8?'Se escuchan. Pausar en silencio es mejor que rellenar.'
-    :'Las muletillas se robaron el show.';
-  $('res').hidden=false;
+$('go').onclick = () => running ? stop() : start(false);
+$('demo').onclick = () => { if (!running) start(true); };
+$('newTopic').onclick = newTopic;
+$('again').onclick = () => { $('res').hidden = true; reset(); newTopic(); };
+$('list').onchange = loadFillers;
+
+if (!SR) {
+  $('go').disabled = true;
+  setStatus(false, 'Navegador no compatible');
+  warn('Este navegador no soporta reconocimiento de voz. Usa Google Chrome o Microsoft Edge.');
 }
 
-$('go').onclick=()=>running?stop():start(false);
-$('demo').onclick=()=>{if(!running)start(true)};
-$('newTopic').onclick=newTopic;
-$('again').onclick=()=>{$('res').hidden=true;reset();newTopic()};
-
-if(!SR){$('go').disabled=true;warn('Este navegador no tiene reconocimiento de voz. Abre el archivo en Chrome o Edge, o prueba el modo demo.')}
-newTopic();loadFillers();render();
+newTopic();
+loadFillers();
+render();
 </script>
 </body>
 </html>
