@@ -352,7 +352,7 @@ details input[type="text"], details input:not([type="checkbox"]) {
   <small>Separadas por comas. Los sonidos “eh”, “ehhh”, “mmm”, “ahh” se detectan solos.</small>
   <label style="display:flex; align-items:center; margin-top:14px; cursor:pointer;">
     <input type="checkbox" id="aud" checked style="width:20px;height:20px;margin-right:10px;accent-color:var(--accent);">
-    Detectar “eeeh” alargados por el audio (Chrome casi nunca los escribe)
+    Detectar “eeeh” alargados por el audio (solo escritorio)
   </label>
 </details>
 
@@ -374,14 +374,17 @@ const SECS=30;
 const TOPICS=["Por qué los perros son mejores que los gatos","El mejor día de tu vida","Por qué el lunes debería eliminarse","Tu comida favorita","El superpoder que elegirías","Por qué las vacaciones deberían ser más largas","Tu película favorita","El mejor lugar para viajar"];
 const DEMO="Bueno pues los perros son mejores porque este son muy leales eh y siempre están contentos o sea te reciben en la puerta ok y además ehhh no se enojan como los gatos pues este tipo son más sociables verdad entonces por eso digo que los perros ganan";
 const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+const IS_MOBILE=/Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 const $=id=>document.getElementById(id);
 const norm=s=>s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z ]/g,'');
 const esc=s=>s.replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
 const EH=/^(e+h+m*|e{2,}m*|e+m+|h?m{2,}|a+h+|u+m+)$/;
 
-const EH_MS=900; // un sonido continuo de esta duración, sin texto nuevo, cuenta como “eeeh” (bájalo para detectar más)
+const EH_MS=900;
 let fillers=[],fin='',itr='',peak=0,running=false,end=0,timer,demoT,rec,last={words:[],groups:[]};
 let events=[],baseLen=0,lastTx=0,aTimer,mic,ac;
+
+if(IS_MOBILE)$('aud').checked=false;
 
 function loadFillers(){
   fillers=$('list').value.split(',').map(s=>norm(s).trim().split(/\s+/).filter(Boolean)).filter(a=>a.length).sort((a,b)=>b.length-a.length);
@@ -424,7 +427,10 @@ function start(demo){
   if(demo){
     const w=DEMO.split(' ');let i=0;
     demoT=setInterval(()=>{if(i<w.length){fin+=' '+w[i++];render()}},SECS*900/w.length);
-  }else{startRec();if($('aud').checked)startAudio()}
+  }else{
+    startRec();
+    if($('aud').checked&&!IS_MOBILE)startAudio();
+  }
 }
 
 function tick(){
@@ -435,17 +441,29 @@ function tick(){
 }
 
 function startRec(){
-  rec=new SR();rec.lang='es-CO';rec.continuous=true;rec.interimResults=true;
+  rec=new SR();
+  rec.lang='es-CO';
+  rec.continuous=!IS_MOBILE;
+  rec.interimResults=true;
+  let sesFin='';
   rec.onresult=e=>{
-    let t='';
-    for(let i=e.resultIndex;i<e.results.length;i++){
+    let f='',t='';
+    for(let i=0;i<e.results.length;i++){
       const r=e.results[i];
-      if(r.isFinal)fin+=' '+r[0].transcript;else t+=r[0].transcript;
+      if(r.isFinal)f+=' '+r[0].transcript;
+      else t+=r[0].transcript;
     }
-    itr=t;lastTx=Date.now();render();
+    sesFin=f;
+    itr=f+' '+t;
+    lastTx=Date.now();
+    render();
   };
-  rec.onend=()=>{if(running)try{rec.start()}catch(e){}};
+  rec.onend=()=>{
+    if(sesFin){fin+=' '+sesFin;sesFin='';itr='';render();}
+    if(running)setTimeout(()=>{if(running)try{rec.start()}catch(e){}},120);
+  };
   rec.onerror=e=>{
+    if(e.error==='no-speech'||e.error==='aborted')return;
     if(e.error==='not-allowed'||e.error==='service-not-allowed'){
       warn('No hay permiso para usar el micrófono. Permítelo en la barra de direcciones y vuelve a empezar.');
       stop(true);
@@ -485,6 +503,7 @@ function stopAudio(){
 function stop(quiet){
   if(!running)return;
   running=false;clearInterval(timer);clearInterval(demoT);stopAudio();
+  if(itr){fin+=' '+itr;itr='';render();}
   try{rec&&rec.stop()}catch(e){}
   $('go').textContent='🎙️ Empezar';$('demo').disabled=false;
   if(!quiet)setTimeout(showResults,700);
