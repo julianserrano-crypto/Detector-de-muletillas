@@ -79,7 +79,7 @@ details input{width:100%;margin:8px 0 4px;padding:10px;border:3px solid var(--in
 <header>
   <div class="onair"><i></i>En vivo</div>
   <h1>Detector de <em>muletillas</em></h1>
-  <p>Habla 1 minuto sin decir “ehhh”, “este” o “pues”, y sin quedarte en silencio más de 3 segundos. Cada muletilla aparecerá en rojo.</p>
+  <p>Habla 45 segundos sin decir “ehhh”, “este” o “pues”, y sin quedarte en silencio más de 3 segundos. Cada muletilla aparecerá en rojo.</p>
 </header>
 
 <div id="warn"></div>
@@ -90,7 +90,7 @@ details input{width:100%;margin:8px 0 4px;padding:10px;border:3px solid var(--in
 </section>
 
 <section class="hud" aria-live="polite">
-  <div class="stat"><b id="time">60</b><small>segundos</small></div>
+  <div class="stat"><b id="time">45</b><small>segundos</small></div>
   <div class="bar"><i id="bar"></i></div>
   <div class="stat red"><b id="count">0</b><small>muletillas</small></div>
   <div class="stat sil"><b id="scount">0</b><small>silencios</small></div>
@@ -125,7 +125,7 @@ details input{width:100%;margin:8px 0 4px;padding:10px;border:3px solid var(--in
 </div>
 
 <script>
-const SECS=60;
+const SECS=45;
 const TOPICS=["Por qué los perros son mejores que los gatos","El mejor día de tu vida","Por qué el lunes debería eliminarse","Tu comida favorita","El superpoder que elegirías","Por qué las vacaciones deberían ser más largas","Tu película favorita","El mejor lugar para viajar","Por qué la pizza con piña sí es válida","Cómo sería un día sin celular","Tu videojuego favorito y por qué","Por qué hay que dormir ocho horas","El mejor regalo que has recibido","Qué harías si fueras presidente por un día","Por qué el fútbol es el mejor deporte","Tu mascota ideal","Cómo prepararías tu desayuno perfecto","Por qué deberían quitar la tarea","El trabajo de tus sueños","Si pudieras tener un animal exótico de mascota","Tu canción favorita y lo que te hace sentir","Por qué la música es importante en la vida","Un invento que cambiaría el mundo","Cómo sería vivir en la Luna","La mejor clase del colegio o la universidad","Por qué el verano es mejor que el invierno","Qué harías si te ganaras la lotería","Tu serie favorita","Cómo es el amigo perfecto","Por qué hay que cuidar el medio ambiente","Un viaje en el tiempo: ¿al pasado o al futuro?","Por qué la comida casera es mejor","El mejor consejo que te han dado","Cómo sería un mundo sin internet","Tu lugar favorito de tu ciudad","Por qué leer libros es mejor que ver videos","Una tradición de tu familia","Si pudieras cenar con alguien famoso","Por qué reírse es bueno para la salud","Cómo organizarías la fiesta perfecta"];
 const DEMO="Bueno pues los perros son mejores porque este son muy leales eh yyyy siempre están contentos o sea te reciben en la puerta ok y además ehhh no se enojan como los gatos pues este tipo son más sociables verdad entonces por eso digo que los perros ganan";
 const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
@@ -186,7 +186,7 @@ function start(demo){
   timer=setInterval(tick,200);
   if(demo){
     const w=DEMO.split(' ');let i=0,hold=0;
-    demoT=setInterval(()=>{if(i===20&&hold<4){hold++;return}if(i<w.length){fin+=' '+w[i++];lastTx=Date.now();render()}},SECS*850/w.length);
+    demoT=setInterval(()=>{if(i===20&&hold<5){hold++;return}if(i<w.length){fin+=' '+w[i++];lastTx=Date.now();render()}},SECS*850/w.length);
   }else{startRec();if($('aud').checked)startAudio()}
 }
 
