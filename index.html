@@ -26,14 +26,16 @@ button.ghost{background:#fff;color:var(--ink)}
 .topic button.ghost{background:var(--ink);color:#fff}
 button:disabled{opacity:.45;cursor:not-allowed}
 button:focus-visible,input:focus-visible,summary:focus-visible{outline:4px solid var(--cyan);outline-offset:3px}
-.hud{display:grid;grid-template-columns:auto 1fr auto;gap:18px;align-items:center}
+.hud{display:grid;grid-template-columns:auto 1fr auto auto;gap:18px;align-items:center}
 .stat{background:#fff;color:var(--ink);border:4px solid var(--ink);border-radius:18px;box-shadow:6px 6px 0 var(--sh);min-width:120px;padding:8px 16px;text-align:center}
 .stat b{font:400 clamp(2.6rem,8vw,4.6rem)/1 Impact,sans-serif;display:block}
 .stat small{font-weight:700;color:var(--mute)}
 .stat.red{background:var(--red);color:#fff}
 .stat.red small{color:#fff}
+.stat.sil{background:var(--cyan)}
+.stat.sil small{color:var(--ink)}
 #time.low{color:var(--red);animation:thump .5s infinite alternate}
-#count.bump{animation:bump .45s}
+#count.bump,#scount.bump{animation:bump .45s}
 .bar{height:26px;background:#fff;border:4px solid var(--ink);border-radius:999px;overflow:hidden;box-shadow:4px 4px 0 var(--sh)}
 .bar i{display:block;height:100%;width:100%;background:linear-gradient(45deg,#0fb5bb 25%,transparent 25%,transparent 50%,#0fb5bb 50%,#0fb5bb 75%,transparent 75%),var(--cyan);background-size:40px 40px;transition:width .2s linear}
 body.live .bar i{animation:stripes .8s linear infinite}
@@ -41,6 +43,7 @@ body.live .bar i{animation:stripes .8s linear infinite}
 .tx .ph{color:#a79fd1;font-weight:400;font-style:italic}
 mark{display:inline-block;background:var(--red);color:#fff;font:400 1.5em/1.05 Impact,"Arial Black",sans-serif;padding:0 .3em;border:3px solid var(--ink);border-radius:8px;box-shadow:3px 3px 0 var(--ink);margin:0 .12em;letter-spacing:.03em;text-transform:uppercase;transform:rotate(-2deg)}
 mark:nth-of-type(even){transform:rotate(1.5deg)}
+mark.sil{background:var(--cyan);color:var(--ink);font-size:1.05em;transform:none}
 .controls{display:flex;gap:14px;flex-wrap:wrap}
 #go{font-size:1.5rem;padding:16px 36px;background:var(--yel);color:var(--ink)}
 body.live #go{background:var(--red);color:#fff}
@@ -52,6 +55,7 @@ details input{width:100%;margin:8px 0 4px;padding:10px;border:3px solid var(--in
 #warn:empty{display:none}
 #flash{position:fixed;inset:0;display:grid;place-items:center;font:400 clamp(3.5rem,15vw,11rem) Impact,"Arial Black",sans-serif;color:var(--yel);-webkit-text-stroke:4px var(--ink);text-shadow:8px 8px 0 var(--red);background:radial-gradient(circle,transparent 35%,#ff2e4d99 100%);pointer-events:none;opacity:0}
 #flash.on{animation:fl .8s ease-out}
+#flash.sil{color:var(--cyan);text-shadow:8px 8px 0 var(--ink);background:radial-gradient(circle,transparent 35%,#19d3da88 100%)}
 #res{position:fixed;inset:0;background:#170f3af2;display:grid;place-items:center;padding:16px;overflow-y:auto}
 #res[hidden]{display:none}
 .card{background:#fff;color:var(--ink);border:5px solid var(--ink);border-radius:24px;box-shadow:10px 10px 0 var(--red);padding:clamp(20px,4vw,40px);max-width:620px;width:100%;text-align:center}
@@ -59,6 +63,8 @@ details input{width:100%;margin:8px 0 4px;padding:10px;border:3px solid var(--in
 .card ul{list-style:none;padding:0;margin:14px 0;display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
 .card li{background:var(--yel);border:3px solid var(--ink);border-radius:20px;padding:4px 14px;font-weight:700}
 .card p{margin:8px 0;font-size:1.1rem}
+#rsil{font-weight:700}
+#rsil:empty{display:none}
 .lesson{color:var(--mute);font-style:italic;margin:14px 0 18px!important}
 @keyframes fl{0%{opacity:1;transform:scale(.6) rotate(-7deg)}25%{opacity:1;transform:scale(1.1) rotate(2deg)}100%{opacity:0;transform:scale(1.25)}}
 @keyframes bump{40%{transform:scale(1.5) rotate(-4deg)}}
@@ -66,14 +72,14 @@ details input{width:100%;margin:8px 0 4px;padding:10px;border:3px solid var(--in
 @keyframes blink{50%{opacity:.3}}
 @keyframes stripes{to{background-position:40px 0}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}#flash.on{opacity:.9}}
-@media (max-width:560px){.hud{grid-template-columns:1fr 1fr}.bar{grid-column:1/-1;order:3}.tx{min-height:30vh;max-height:42vh;padding:14px 16px}.controls button{flex:1 1 100%}#go{font-size:1.3rem;padding:14px}.topic{padding:14px 16px}body{background-attachment:scroll}}
+@media (max-width:560px){.hud{grid-template-columns:repeat(3,1fr);gap:10px}.stat{min-width:0;padding:6px 8px}.bar{grid-column:1/-1;order:4}.tx{min-height:30vh;max-height:42vh;padding:14px 16px}.controls button{flex:1 1 100%}#go{font-size:1.3rem;padding:14px}.topic{padding:14px 16px}body{background-attachment:scroll}}
 </style>
 </head>
 <body>
 <header>
   <div class="onair"><i></i>En vivo</div>
   <h1>Detector de <em>muletillas</em></h1>
-  <p>Habla 30 segundos sin decir “ehhh”, “este” o “pues”. Cada una aparecerá en rojo.</p>
+  <p>Habla 1 minuto sin decir “ehhh”, “este” o “pues”, y sin quedarte en silencio más de 3 segundos. Cada muletilla aparecerá en rojo.</p>
 </header>
 
 <div id="warn"></div>
@@ -84,9 +90,10 @@ details input{width:100%;margin:8px 0 4px;padding:10px;border:3px solid var(--in
 </section>
 
 <section class="hud" aria-live="polite">
-  <div class="stat"><b id="time">30</b><small>segundos</small></div>
+  <div class="stat"><b id="time">60</b><small>segundos</small></div>
   <div class="bar"><i id="bar"></i></div>
   <div class="stat red"><b id="count">0</b><small>muletillas</small></div>
+  <div class="stat sil"><b id="scount">0</b><small>silencios</small></div>
 </section>
 
 <section id="tx" class="tx"></section>
@@ -99,8 +106,8 @@ details input{width:100%;margin:8px 0 4px;padding:10px;border:3px solid var(--in
 <details>
   <summary>⚙️ Muletillas que se detectan</summary>
   <input id="list" value="este, pues, o sea, bueno, es que, entonces, digamos, tipo, como que, a ver, ok, okay, okey, vale, mira, oye, sabes, verdad, me entiendes, ya sabes, la verdad, mejor dicho, no pues, en fin, en plan, básicamente, literalmente, obviamente, y todo eso, o algo así" aria-label="Lista de muletillas separadas por comas">
-  <small>Separadas por comas. Los sonidos “eh”, “ehhh”, “mmm”, “ahh” se detectan solos.</small>
-  <label style="display:block;margin-top:10px"><input type="checkbox" id="aud" checked style="width:auto;margin:0 8px 0 0">Detectar “eeeh” alargados por el audio (Chrome casi nunca los escribe)</label>
+  <small>Separadas por comas. Los sonidos “eh”, “ehhh”, “mmm”, “ahh”, “yyy” se detectan solos (una “y” normal entre palabras no cuenta).</small>
+  <label style="display:block;margin-top:10px"><input type="checkbox" id="aud" checked style="width:auto;margin:0 8px 0 0">Detectar “eeeh”, “mmm”, “ahh”, “yyy” alargados por el audio (Chrome casi nunca los escribe)</label>
 </details>
 
 <div id="flash" aria-hidden="true">¡MULETILLA!</div>
@@ -110,6 +117,7 @@ details input{width:100%;margin:8px 0 4px;padding:10px;border:3px solid var(--in
     <div class="big" id="rn">0</div>
     <p><strong>muletillas</strong> <span id="rs"></span></p>
     <ul id="rt"></ul>
+    <p id="rsil"></p>
     <p id="rm"></p>
     <p class="lesson">Quien habla casi no las nota. La audiencia sí, y le restan fuerza a tu mensaje.</p>
     <button id="again">Otro voluntario</button>
@@ -117,20 +125,21 @@ details input{width:100%;margin:8px 0 4px;padding:10px;border:3px solid var(--in
 </div>
 
 <script>
-const SECS=30;
-const TOPICS=["Por qué los perros son mejores que los gatos","El mejor día de tu vida","Por qué el lunes debería eliminarse","Tu comida favorita","El superpoder que elegirías","Por qué las vacaciones deberían ser más largas","Tu película favorita","El mejor lugar para viajar"];
-const DEMO="Bueno pues los perros son mejores porque este son muy leales eh y siempre están contentos o sea te reciben en la puerta ok y además ehhh no se enojan como los gatos pues este tipo son más sociables verdad entonces por eso digo que los perros ganan";
+const SECS=60;
+const TOPICS=["Por qué los perros son mejores que los gatos","El mejor día de tu vida","Por qué el lunes debería eliminarse","Tu comida favorita","El superpoder que elegirías","Por qué las vacaciones deberían ser más largas","Tu película favorita","El mejor lugar para viajar","Por qué la pizza con piña sí es válida","Cómo sería un día sin celular","Tu videojuego favorito y por qué","Por qué hay que dormir ocho horas","El mejor regalo que has recibido","Qué harías si fueras presidente por un día","Por qué el fútbol es el mejor deporte","Tu mascota ideal","Cómo prepararías tu desayuno perfecto","Por qué deberían quitar la tarea","El trabajo de tus sueños","Si pudieras tener un animal exótico de mascota","Tu canción favorita y lo que te hace sentir","Por qué la música es importante en la vida","Un invento que cambiaría el mundo","Cómo sería vivir en la Luna","La mejor clase del colegio o la universidad","Por qué el verano es mejor que el invierno","Qué harías si te ganaras la lotería","Tu serie favorita","Cómo es el amigo perfecto","Por qué hay que cuidar el medio ambiente","Un viaje en el tiempo: ¿al pasado o al futuro?","Por qué la comida casera es mejor","El mejor consejo que te han dado","Cómo sería un mundo sin internet","Tu lugar favorito de tu ciudad","Por qué leer libros es mejor que ver videos","Una tradición de tu familia","Si pudieras cenar con alguien famoso","Por qué reírse es bueno para la salud","Cómo organizarías la fiesta perfecta"];
+const DEMO="Bueno pues los perros son mejores porque este son muy leales eh yyyy siempre están contentos o sea te reciben en la puerta ok y además ehhh no se enojan como los gatos pues este tipo son más sociables verdad entonces por eso digo que los perros ganan";
 const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
 const $=id=>document.getElementById(id);
 const norm=s=>s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z ]/g,'');
 const esc=s=>s.replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
-const EH=/^(e+h+m*|e{2,}m*|e+m+|h?m{2,}|a+h+|u+m+)$/;
+const EH=/^(e+h+m*|e{2,}m*|e+m+|h+m+|h?m{2,}|a+h+|a{2,}|u+h+m*|u+m+|y{2,})$/;
+const SIL='⏸ SILENCIO';
 
 const MOBILE=/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)||(navigator.maxTouchPoints>1&&/Mac/.test(navigator.platform));
 let LANG='es-CO';
 const EH_MS=900; // un sonido continuo de esta duración, sin texto nuevo, cuenta como “eeeh” (bájalo para detectar más)
 let fillers=[],fin='',itr='',peak=0,running=false,end=0,timer,demoT,rec,last={words:[],groups:[]};
-let events=[],baseLen=0,lastTx=0,aTimer,mic,ac;
+let events=[],baseLen=0,lastTx=0,aTimer,mic,ac,sils=[],silFired=false,lastVoice=0,armed=false;
 
 function loadFillers(){
   fillers=$('list').value.split(',').map(s=>norm(s).trim().split(/\s+/).filter(Boolean)).filter(a=>a.length).sort((a,b)=>b.length-a.length);
@@ -140,6 +149,7 @@ function analyze(words){
   const t=words.map(norm),m=t.map(()=>false),groups=[];
   for(let i=0;i<t.length;i++){
     let len=(EH.test(t[i])||(t[i]==='e'&&!/^h?i/.test(t[i+1]||'')))?1:0;
+    if(!len&&t[i]==='y'&&t[i+1]==='y'){let j=i;while(t[j+1]==='y')j++;len=j-i+1}
     if(!len)for(const f of fillers)if(f.every((x,k)=>t[i+k]===x)){len=f.length;break}
     if(len){for(let k=0;k<len;k++)m[i+k]=true;groups.push(t.slice(i,i+len).join(' '));i+=len-1}
   }
@@ -148,31 +158,35 @@ function analyze(words){
 
 function render(){
   const words=(fin+' '+itr).split(/\s+/).filter(Boolean);baseLen=words.length;
-  [...events].sort((a,b)=>b-a).forEach(p=>words.splice(Math.min(p,words.length),0,'eeeh'));
+  [...events.map(p=>[p,'eeeh']),...sils.map(p=>[p,SIL])].sort((a,b)=>b[0]-a[0]).forEach(([p,t])=>words.splice(Math.min(p,words.length),0,t));
   const{m,groups}=analyze(words);
   last={words,groups};
-  $('tx').innerHTML=words.length?words.map((w,i)=>m[i]?`<mark>${esc(w)}</mark>`:esc(w)).join(' '):'<span class="ph">'+(running?'🎙️ Escuchando… habla ahora':'Aquí aparecerá lo que digas…')+'</span>';
-  $('count').textContent=groups.length;
+  $('tx').innerHTML=words.length?words.map((w,i)=>w===SIL?`<mark class="sil">${SIL}</mark>`:m[i]?`<mark>${esc(w)}</mark>`:esc(w)).join(' '):'<span class="ph">'+(running?'🎙️ Escuchando… habla ahora':'Aquí aparecerá lo que digas…')+'</span>';
+  $('count').textContent=groups.length;$('scount').textContent=sils.length;
   if(groups.length>peak){peak=groups.length;flash()}
   $('tx').scrollTop=1e6;
 }
 
-function flash(){for(const [id,c] of [['flash','on'],['count','bump']]){const e=$(id);e.classList.remove(c);void e.offsetWidth;e.classList.add(c)}}
+function flash(msg){
+  const f=$('flash');f.textContent=msg||'¡MULETILLA!';f.classList.toggle('sil',!!msg);
+  for(const [id,c] of [['flash','on'],[msg?'scount':'count','bump']]){const e=$(id);e.classList.remove(c);void e.offsetWidth;e.classList.add(c)}
+}
 function warn(t){$('warn').textContent=t}
-function newTopic(){$('topic').textContent=TOPICS[Math.floor(Math.random()*TOPICS.length)]}
+let deck=[];
+function newTopic(){if(!deck.length)deck=TOPICS.map((_,i)=>i).sort(()=>Math.random()-.5);$('topic').textContent=TOPICS[deck.pop()]}
 
 function reset(){
-  fin=itr='';peak=0;events=[];$('time').textContent=SECS;$('time').classList.remove('low');$('bar').style.width='100%';render();
+  fin=itr='';peak=0;events=[];sils=[];$('time').textContent=SECS;$('time').classList.remove('low');$('bar').style.width='100%';render();
 }
 
 function start(demo){
   loadFillers();reset();warn('');$('res').hidden=true;
-  running=true;document.body.classList.add('live');end=Date.now()+SECS*1000;
+  running=true;document.body.classList.add('live');end=Date.now()+SECS*1000;lastTx=lastVoice=Date.now();silFired=false;armed=!!demo;
   $('go').textContent='⏹ Detener';$('demo').disabled=true;render();
   timer=setInterval(tick,200);
   if(demo){
-    const w=DEMO.split(' ');let i=0;
-    demoT=setInterval(()=>{if(i<w.length){fin+=' '+w[i++];render()}},SECS*900/w.length);
+    const w=DEMO.split(' ');let i=0,hold=0;
+    demoT=setInterval(()=>{if(i===20&&hold<4){hold++;return}if(i<w.length){fin+=' '+w[i++];lastTx=Date.now();render()}},SECS*850/w.length);
   }else{startRec();if($('aud').checked)startAudio()}
 }
 
@@ -180,7 +194,16 @@ function tick(){
   const left=Math.max(0,(end-Date.now())/1000);
   $('time').textContent=Math.ceil(left);$('time').classList.toggle('low',left>0&&left<=5);
   $('bar').style.width=left/SECS*100+'%';
-  if(left<=0)stop();
+  if(left<=0)stop();else checkSilence();
+}
+
+// Más de 3 s sin voz ni texto nuevo = error de silencio (uno por pausa)
+function checkSilence(){
+  const now=Date.now();
+  if(!armed){if(now-(end-SECS*1000)>4000){armed=true;lastTx=lastVoice=now}return}
+  if(now-Math.max(lastTx,lastVoice)>3000){
+    if(!silFired){silFired=true;sils.push(baseLen);flash('¡SILENCIO!');render()}
+  }else silFired=false;
 }
 
 const nz=t=>norm(t).replace(/\s+/g,' ').trim();
@@ -200,7 +223,8 @@ function sessionText(rs){
 
 function startRec(){
   const r=rec=new SR();r.lang=LANG;r.continuous=true;r.interimResults=true;
-  r.onresult=e=>{if(r!==rec)return;itr=sessionText(e.results);lastTx=Date.now();render()};
+  r.onresult=e=>{if(r!==rec)return;armed=true;itr=sessionText(e.results);lastTx=Date.now();render()};
+  r.onaudiostart=()=>{if(!armed){armed=true;lastTx=lastVoice=Date.now()}};
   r.onend=()=>{
     if(r!==rec)return;
     fin+=' '+itr;itr='';
@@ -230,7 +254,7 @@ async function startAudio(){
       let s=0;for(const v of buf){const d=(v-128)/128;s+=d*d}
       const rms=Math.sqrt(s/buf.length),now=Date.now();
       floor=Math.min(floor,Math.max(rms,.004));
-      if(rms>Math.max(.03,floor*4)){if(now-lastV>300)t0=now;lastV=now}
+      if(rms>Math.max(.03,floor*4)){if(now-lastV>300)t0=now;lastV=lastVoice=now}
       if(running&&now-lastV<300&&now-t0>EH_MS-200&&now-lastTx>EH_MS&&now>cool){
         events.push(baseLen);cool=now+1500;render();
       }
@@ -255,13 +279,14 @@ function showResults(){
   const{words,groups}=last,n=groups.length,tally={};
   groups.forEach(g=>tally[g]=(tally[g]||0)+1);
   const top=Object.entries(tally).sort((a,b)=>b[1]-a[1]).slice(0,5);
-  const pct=words.length?Math.round(n/words.length*100):0;
+  const wc=words.filter(w=>w!==SIL).length,pct=wc?Math.round(n/wc*100):0;
   $('rn').textContent=n;
-  $('rs').textContent=`en ${words.length} palabras (${pct}% de tu discurso)`;
+  $('rs').textContent=`en ${wc} palabras (${pct}% de tu discurso)`;
   $('rt').innerHTML=top.map(([w,c])=>`<li><b>${esc(w)}</b> ×${c}</li>`).join('');
+  $('rsil').textContent=sils.length?`⏸ ${sils.length} silencio${sils.length>1?'s':''} de más de 3 segundos`:'';
   $('rm').textContent=n===0?'Discurso limpio. ¿O será que el micrófono no las escuchó? 😅'
-    :n<=3?'Bastante fluido. Casi no se notan.'
-    :n<=8?'Se escuchan. Pausar en silencio es mejor que rellenar.'
+    :n<=5?'Bastante fluido. Casi no se notan.'
+    :n<=12?'Se escuchan. Pausar en silencio es mejor que rellenar.'
     :'Las muletillas se robaron el show.';
   $('res').hidden=false;
 }
